@@ -77,7 +77,6 @@
                 min="1900-01-01"
               ></v-date-picker>
             </v-menu>
-
             <v-btn
               class="mr-4"
               type="submit"
@@ -85,9 +84,10 @@
             >
               Guardar Usuario
             </v-btn>
-            <v-btn @click="clear">
+            <v-btn small @click="clear">
               Limpiar
             </v-btn>
+
           </form>
         </validation-observer>
       </v-col>
@@ -124,6 +124,7 @@ export default {
     ValidationObserver,
   },
   data: () => ({
+    id: null,
     first_name: "",
     last_name: "",
     email: "",
@@ -131,14 +132,20 @@ export default {
     activePicker: null,
     menu: false,
   }),
-  computed: {
-    ...mapGetters(['User/users'])
-  },
   methods: {
     submit() {
       this.$refs.observer.validate().then(status => {
         if (status) {
+          const listId = this.$store.getters['User/users'].filter(item => {
+            return item.id
+          }).map(item => {
+            return item.id
+          });
+          console.log(listId)
+          const id = Math.max(...listId) + 1
+          console.log(id)
           const formData = {
+            id,
             first_name: this.first_name,
             last_name: this.last_name,
             email: this.email,
