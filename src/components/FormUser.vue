@@ -87,9 +87,25 @@
             <v-btn small @click="clear">
               Limpiar
             </v-btn>
-
           </form>
         </validation-observer>
+        <br/>
+        <v-alert
+          v-if="status == 'SUCCESS'"
+          border="right"
+          dismissible
+          type="success"
+          transition="slide-x-transition"
+        >Usuario agregado correctamente
+        </v-alert>
+        <v-alert
+          v-if="status == 'ERROR'"
+          border="right"
+          dismissible
+          type="error"
+          transition="slide-x-transition"
+        >No se ha podido agregar el usuario
+        </v-alert>
       </v-col>
     </v-row>
   </v-container>
@@ -131,6 +147,7 @@ export default {
     birthday: "",
     activePicker: null,
     menu: false,
+    status: null
   }),
   methods: {
     submit() {
@@ -152,9 +169,15 @@ export default {
             birthday: this.birthday,
           }
           this.$store.dispatch('User/addUser', formData).then(() => {
+            this.status = "SUCCESS";
             this.clear()
           })
+        } else {
+          this.status = "ERROR";
         }
+        setTimeout(() => {
+          this.status = null
+        }, 5000)
       })
     },
     clear() {
